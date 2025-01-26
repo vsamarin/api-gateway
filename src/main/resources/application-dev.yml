@@ -1,0 +1,7 @@
+config:
+  baseUrl: http://localhost:8000
+  keycloak:
+    authServerUrl: http://localhost:8080/keycloak
+    realm: api-gateway
+    clientId: api-gateway-client
+    clientSecret: 4qNKM3AaaEK0E4U2GOrd2oZ7losDDLdR

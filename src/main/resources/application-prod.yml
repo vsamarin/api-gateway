@@ -1,0 +1,7 @@
+config:
+  baseUrl: ${API_BASE_URL}
+  keycloak:
+    authServerUrl: ${KEYCLOAK_AUTH_SERVER_URL}
+    realm: ${KEYCLOAK_REALM}
+    clientId: ${KEYCLOAK_CLIENT_ID}
+    clientSecret: ${KEYCLOAK_CLIENT_SECRET}

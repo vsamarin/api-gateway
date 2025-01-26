@@ -1,0 +1,59 @@
+services:
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0.4
+    container_name: keycloak
+    restart: 'no'
+    hostname: localhost
+    ports:
+      - '8080:8080'
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HTTP_RELATIVE_PATH: /keycloak
+    command: start-dev
+    #command: export --dir /opt/keycloak/providers/ --users different_files && start-dev
+
+
+  postgres:
+    image: postgres:14-alpine
+    container_name: postgres
+    restart: 'no'
+    environment:
+      - POSTGRES_DB=users
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - 5439:5432
+    networks:
+      - home-network
+    healthcheck:
+      test: [ 'CMD-SHELL', 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB' ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  users:
+    image: vsamarin/users:1.0.2
+    container_name: users
+    restart: 'no'
+    environment:
+      - USERS_DB_URL=jdbc:postgresql://postgres:5432/users
+      - USERS_DB_USER=test
+      - USERS_DB_PASSWORD=test
+    ports:
+      - '8000:8000'
+    networks:
+      - home-network
+    depends_on:
+      - postgres
+
+volumes:
+  pgdata:
+    driver: local
+
+networks:
+  home-network:
+    driver: bridge

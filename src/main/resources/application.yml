@@ -1,0 +1,6 @@
+server:
+  port: 8002
+  max-http-request-header-size: 100KB
+spring:
+  application:
+    name: api-gateway
