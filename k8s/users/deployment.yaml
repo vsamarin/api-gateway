@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: users
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: users
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/actuator/prometheus"
+    spec:
+      containers:
+        - name: users
+          image: vsamarin/users:1.0.2
+          imagePullPolicy: Always
+          ports:
+            - name: web
+              containerPort: 8000
+          env:
+            - name: USERS_DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: users-config
+                  key: db.url
+            - name: USERS_DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: users-config
+                  key: db.user
+            - name: USERS_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: users-secret
+                  key: db.password

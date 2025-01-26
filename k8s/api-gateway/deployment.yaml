@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: users
+          image: vsamarin/api-gateway:1.0.0
+          imagePullPolicy: Always
+          ports:
+            - name: web
+              containerPort: 8002
+          env:
+            - name: API_BASE_URL
+              value: http://users:8090
+            - name: KEYCLOAK_AUTH_SERVER_URL
+              value: http://keycloak:8080/keycloak
+              #value: http://arch.homework/keycloak
+            - name: KEYCLOAK_REALM
+              value: api-gateway
+            - name: KEYCLOAK_CLIENT_ID
+              value: api-gateway-client
+            - name: KEYCLOAK_CLIENT_SECRET
+              value: 4qNKM3AaaEK0E4U2GOrd2oZ7losDDLdR

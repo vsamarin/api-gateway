@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api-gateway
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9113"
+    prometheus.io/scheme: http
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/x-forwarded-prefix: /users
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: arch.homework
+      http:
+        paths:
+          - pathType: Prefix
+            backend:
+              service:
+                name: api-gateway
+                port:
+                  number: 8002
+            path: /

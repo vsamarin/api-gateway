@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: users-config
+  labels:
+    app: users
+data:
+  db.url: jdbc:postgresql://postgresql:5432/users
+  db.user: test
+
