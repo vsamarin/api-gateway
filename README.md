@@ -1,3 +1,6 @@
+## API Gateway
+![schema](./schema.png)
+
 ## Build Docker Image
 
 ```shell
